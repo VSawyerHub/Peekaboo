@@ -10,7 +10,7 @@
 
 ## What is this?
 
-Peekaboo is a lightweight desktop app that puts a **transparent, click-through overlay** on top of everything on your screen — including your game. Viewers can trigger jumpscares, screen shakes, glitches, and more via **Twitch bits or subs**, and the streamer actually sees it happen in real time.
+Peekaboo is a lightweight desktop app that puts a **transparent, click-through overlay** on top of everything on your screen — including your game. Viewers can trigger jumpscares, screen shakes, glitches, and more via **Twitch or Youtube or Kick**, and the streamer actually sees it happen in real time.
 
 Unlike browser-source-only overlays, **this appears on your monitor** — so the reaction is genuine.
 
