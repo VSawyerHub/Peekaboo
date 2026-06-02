@@ -3,15 +3,19 @@
   "version": "0.1.0",
   "description": "Interactive scare overlay for streamers",
   "scripts": {
-    "dev": "tauri dev",
-    "build": "tauri build",
-    "preview": "vite preview"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.6.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.6.0"
+    "@tauri-apps/cli": "^1.6.0",
+    "vite": "^5.0.0"
   },
   "license": "MIT",
   "repository": {
