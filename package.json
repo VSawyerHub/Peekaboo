@@ -1,0 +1,21 @@
+{
+  "name": "peekaboo",
+  "version": "0.1.0",
+  "description": "Interactive scare overlay for streamers",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.6.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.6.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/you/peekaboo"
+  }
+}
