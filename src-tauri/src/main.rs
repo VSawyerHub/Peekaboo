@@ -2,8 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{
-    AppHandle, Builder, GlobalShortcutManager, Manager, 
-    WindowBuilder, WindowUrl,
+    AppHandle, Manager, 
+    WebviewUrl, WebviewWindowBuilder,
 };
 
 /// Fired from the frontend dashboard to trigger an effect on the overlay
@@ -29,16 +29,16 @@ fn set_overlay_visible(app: AppHandle, visible: bool) {
 }
 
 fn main() {
-    Builder::default()
+    tauri::Builder::default()
         .setup(|app| {
             let handle = app.handle();
 
             // ── Overlay window ───────────────────────────────────────────────
             // Transparent, always-on-top, click-through, no decorations
-            let overlay = WindowBuilder::new(
+            let overlay = WebviewWindowBuilder::new(
                 app,
                 "overlay",
-                WindowUrl::App("overlay.html".into()),
+                WebviewUrl::App("overlay.html".into()),
             )
             .title("Peekaboo Overlay")
             .fullscreen(true)
@@ -46,7 +46,6 @@ fn main() {
             .transparent(true)
             .always_on_top(true)
             .skip_taskbar(true)
-            // Start hidden — only shown when streamer enables it
             .visible(false)
             .build()?;
 
@@ -58,7 +57,7 @@ fn main() {
                     GetWindowLongW, SetWindowLongW, GWL_EXSTYLE,
                     WS_EX_LAYERED, WS_EX_TRANSPARENT,
                 };
-                let hwnd = HWND(overlay.hwnd().unwrap().0);
+                let hwnd = HWND(overlay.hwnd().unwrap().0 as _);
                 unsafe {
                     let ex_style = GetWindowLongW(hwnd, GWL_EXSTYLE);
                     SetWindowLongW(
@@ -76,7 +75,6 @@ fn main() {
                 let ns_window = overlay.ns_window().unwrap() as id;
                 unsafe {
                     ns_window.setIgnoresMouseEvents_(true);
-                    // Float above fullscreen apps (e.g. games)
                     let behavior = ns_window.collectionBehavior()
                         | NSWindowCollectionBehavior::NSWindowCollectionBehaviorCanJoinAllSpaces
                         | NSWindowCollectionBehavior::NSWindowCollectionBehaviorFullScreenAuxiliary;
@@ -85,10 +83,10 @@ fn main() {
             }
 
             // ── Dashboard window ─────────────────────────────────────────────
-            WindowBuilder::new(
+            WebviewWindowBuilder::new(
                 app,
                 "dashboard",
-                WindowUrl::App("index.html".into()),
+                WebviewUrl::App("index.html".into()),
             )
             .title("Peekaboo — Dashboard")
             .inner_size(420.0, 820.0)
@@ -98,21 +96,24 @@ fn main() {
             .build()?;
 
             // ── Global hotkeys ───────────────────────────────────────────────
-            let mut shortcuts = handle.global_shortcut_manager();
+            use tauri::plugin::TauriPlugin;
+            use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut};
 
-            // Ctrl+Alt+Shift+K = emergency kill (won't interfere with games)
+            // Ctrl+Alt+Shift+K = emergency kill
             let h1 = handle.clone();
-            shortcuts.register("Ctrl+Alt+Shift+K", move || {
-                if let Some(w) = h1.get_window("overlay") {
+            handle.plugin(tauri_plugin_global_shortcut::Builder::new().build())?;
+            handle.global_shortcut().on_shortcut("Ctrl+Alt+Shift+K", move |_app, _shortcut, _event| {
+                if let Some(w) = h1.get_webview_window("overlay") {
                     w.hide().ok();
                     w.emit("kill", ()).ok();
                 }
             })?;
+            handle.global_shortcut().register(Shortcut::new(None, "Ctrl+Alt+Shift+K"))?;
 
-            // Ctrl+Shift+O = toggle overlay visibility
+            // Ctrl+Shift+O = toggle overlay
             let h2 = handle.clone();
-            shortcuts.register("Ctrl+Shift+O", move || {
-                if let Some(w) = h2.get_window("overlay") {
+            handle.global_shortcut().on_shortcut("Ctrl+Shift+O", move |_app, _shortcut, _event| {
+                if let Some(w) = h2.get_webview_window("overlay") {
                     if w.is_visible().unwrap_or(false) {
                         w.hide().ok();
                     } else {
@@ -120,6 +121,7 @@ fn main() {
                     }
                 }
             })?;
+            handle.global_shortcut().register(Shortcut::new(None, "Ctrl+Shift+O"))?;
 
             Ok(())
         })
