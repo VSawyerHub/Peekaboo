@@ -22,25 +22,20 @@ Unlike browser-source-only overlays, **this appears on your monitor** — so the
 - 📳 **Screen shake** — camera shake feel via CSS animation  
 - 📺 **Glitch effect** — RGB split + scanline corruption  
 - 💬 **Big text** — huge text that slams onto screen  
-- 🎮 **Twitch integration** — bits threshold + subs trigger effects  
-- ⌨️ **Emergency hotkeys** — `ESC` kills overlay instantly  
+- 🎮 **Multi-platform** — Twitch (working) + YouTube/Kick (stubs)  
+- ⌨️ **Emergency hotkeys** — kill overlay instantly  
 - 🪟 **Click-through** — streamer can still use their PC normally  
+- 💾 **Auto-save** — all settings persist via localStorage  
 - 🔓 **Open source** — full code, nothing hidden  
 
 ---
 
 ## Requirements
 
-| Tool | Version |
-|------|---------|
-| [Rust](https://rustup.rs/) | stable (≥ 1.70) |
-| [Node.js](https://nodejs.org/) | ≥ 18 |
-| [Tauri CLI](https://tauri.app/v1/guides/getting-started/setup/) | v1 |
+- [Rust](https://rustup.rs/) (stable ≥ 1.70)
+- [Node.js](https://nodejs.org/) (≥ 18)
 
-Install Tauri CLI:
-```bash
-npm install --save-dev @tauri-apps/cli
-```
+Dependencies install automatically via `npm install`.
 
 ---
 
@@ -51,27 +46,32 @@ npm install --save-dev @tauri-apps/cli
 git clone https://github.com/you/peekaboo
 cd peekaboo
 
-# 2. Install JS deps
+# 2. Install dependencies
 npm install
 
 # 3. Run in dev mode
-npm run dev
+npm run tauri:dev
 
 # 4. Build a release binary
-npm run build
+npm run tauri:build
 # → installer appears in src-tauri/target/release/bundle/
 ```
+
+See **[QUICKSTART.md](guide/QUICKSTART.md)** for detailed setup.
 
 ---
 
 ## How to use
 
-1. Launch **Peekaboo**
-2. Connect your Twitch channel (OAuth token with `chat:read` scope — get one at [twitchapps.com/tmi](https://twitchapps.com/tmi/))
-3. Set your **bits threshold** and choose which effect fires
-4. Configure your **jumpscare image/GIF and sound** URL
-5. Toggle the **OVERLAY switch** ON — the transparent window appears
-6. Viewers cheer bits or subscribe → effect fires on your screen
+1. Launch **Peekaboo** (`npm run tauri:dev`)
+2. **Twitch**: Get OAuth token from [twitchapps.com/tmi](https://twitchapps.com/tmi/)  
+   **YouTube/Kick**: See [INTEGRATION_GUIDE.md](guide/INTEGRATION_GUIDE.md) (stubs only)
+3. Set **bits/donation threshold** and choose effect
+4. Configure **images/sounds** (URLs or `assets/` paths)
+5. Toggle **OVERLAY** ON — transparent window appears
+6. Viewers cheer/subscribe → effect fires (or click **Manual Fire** to test)
+
+All settings auto-save to localStorage.
 
 ---
 
@@ -79,8 +79,8 @@ npm run build
 
 | Shortcut | Action |
 |----------|--------|
-| `ESC` | Emergency kill — hides overlay immediately |
-| `Ctrl+Shift+P` | Toggle overlay on/off |
+| `Ctrl+Alt+Shift+K` | Emergency kill — hides overlay |
+| `Ctrl+Shift+O` | Toggle overlay on/off |
 
 ---
 
@@ -96,28 +96,23 @@ peekaboo/
 │   ├── index.html         # Dashboard (control panel)
 │   └── overlay.html       # Transparent overlay (effects renderer)
 ├── assets/
-│   ├── sounds/            # Default sounds (add your own)
-│   └── images/            # Default jumpscares (add your own)
-└── package.json
+│   ├── sounds/            # Add .mp3/.wav files
+│   └── images/            # Add images/GIFs
+├── vite.config.js         # Vite bundler config
+├── package.json
+├── QUICKSTART.md          # Setup guide
+└── INTEGRATION_GUIDE.md   # Platform docs
 ```
 
 ---
 
-## Adding effects
+## Key features
 
-Effects are defined in `src/overlay.html` inside the `effects` object. Adding a new one:
-
-```js
-const effects = {
-  // ... existing effects ...
-
-  myeffect({ duration = 1000 }) {
-    // do something wild
-  }
-};
-```
-
-Then add a button for it in `src/index.html` and it will appear in the dashboard automatically.
+- **Rate limiting**: 3-second cooldown prevents spam
+- **Config persistence**: Settings saved automatically
+- **Multi-platform stubs**: Twitch working, YouTube/Kick ready
+- **Manual testing**: Fire effects without platform connection
+- **Vite-powered**: Fast dev server with hot reload
 
 ---
 
@@ -125,7 +120,7 @@ Then add a button for it in `src/index.html` and it will appear in the dashboard
 
 - Peekaboo **never reads your screen or captures any video**
 - The overlay is a transparent window — it only renders what you configure
-- OAuth token is stored only in memory, never written to disk
+- Tokens/credentials stored in localStorage (browser-level, not sent anywhere)
 - All source code is here, nothing is obfuscated
 
 ---
@@ -138,4 +133,8 @@ MIT — do whatever you want with it.
 
 ## Contributing
 
-PRs welcome. If you build a cool effect, add Twitch EventSub support, or package this for Linux, open a PR!
+PRs welcome! Especially:
+- YouTube integration (see [INTEGRATION_GUIDE.md](guide/INTEGRATION_GUIDE.md))
+- Kick integration
+- Custom effects
+- Linux packaging
