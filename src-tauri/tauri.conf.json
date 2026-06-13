@@ -1,54 +1,27 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Peekaboo",
+  "version": "0.1.0",
+  "identifier": "dev.peekaboo.app",
   "build": {
     "beforeDevCommand": "vite",
+    "devUrl": "http://localhost:5173",
     "beforeBuildCommand": "vite build",
-    "devPath": "http://localhost:5173",
-    "distDir": "../dist"
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "Peekaboo",
-    "version": "0.1.0"
+  "bundle": {
+    "active": true,
+    "category": "Utility",
+    "copyright": "MIT",
+    "targets": "all",
+    "icon": [],
+    "longDescription": "Interactive scare overlay for streamers",
+    "shortDescription": "Peekaboo streamer overlay"
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "globalShortcut": { "all": true },
-      "window": { "all": true },
-      "shell": { "open": true }
+  "app": {
+    "security": {
+      "csp": null
     },
-    "bundle": {
-      "active": true,
-      "category": "Utility",
-      "copyright": "MIT",
-      "deb": { "depends": [] },
-      "externalBin": [],
-      "icon": [],
-      "identifier": "dev.peekaboo.app",
-      "longDescription": "Interactive scare overlay for streamers",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [],
-      "shortDescription": "Peekaboo streamer overlay",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
-    },
-    "security": { "csp": null },
-    "systemTray": {
-      "iconPath": "",
-      "iconAsTemplate": true,
-      "menuOnLeftClick": false
-    },
-    "updater": { "active": false },
     "windows": []
   }
 }
