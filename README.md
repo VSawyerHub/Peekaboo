@@ -3,8 +3,8 @@
 > Interactive scare overlay for streamers — let your viewers jumpscare you in real time via bits & subs.
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Tauri](https://img.shields.io/badge/built%20with-Tauri%20v1-orange)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey)
+![Tauri](https://img.shields.io/badge/built%20with-Tauri%20v2-orange)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
 ---
 
@@ -35,6 +35,23 @@ Unlike browser-source-only overlays, **this appears on your monitor** — so the
 - [Rust](https://rustup.rs/) (stable ≥ 1.70)
 - [Node.js](https://nodejs.org/) (≥ 18)
 
+### Linux dependencies
+
+On Ubuntu/Debian-based systems:
+
+```bash
+sudo apt install libwebkit2gtk-4.1-dev \
+    build-essential \
+    curl \
+    wget \
+    file \
+    libssl-dev \
+    libgtk-3-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev \
+    libsoup2.4-dev
+```
+
 Dependencies install automatically via `npm install`.
 
 ---
@@ -57,7 +74,7 @@ npm run tauri:build
 # → installer appears in src-tauri/target/release/bundle/
 ```
 
-See **[QUICKSTART.md](guide/QUICKSTART.md)** for detailed setup.
+See **[QUICKSTART.md](QUICKSTART.md)** for detailed setup.
 
 ---
 
@@ -65,7 +82,7 @@ See **[QUICKSTART.md](guide/QUICKSTART.md)** for detailed setup.
 
 1. Launch **Peekaboo** (`npm run tauri:dev`)
 2. **Twitch**: Get OAuth token from [twitchapps.com/tmi](https://twitchapps.com/tmi/)  
-   **YouTube/Kick**: See [INTEGRATION_GUIDE.md](guide/INTEGRATION_GUIDE.md) (stubs only)
+   **YouTube/Kick**: See [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) (stubs only)
 3. Set **bits/donation threshold** and choose effect
 4. Configure **images/sounds** (URLs or `assets/` paths)
 5. Toggle **OVERLAY** ON — transparent window appears
@@ -81,6 +98,8 @@ All settings auto-save to localStorage.
 |----------|--------|
 | `Ctrl+Alt+Shift+K` | Emergency kill — hides overlay |
 | `Ctrl+Shift+O` | Toggle overlay on/off |
+
+> ESC removed to avoid game conflicts.
 
 ---
 
@@ -134,7 +153,7 @@ MIT — do whatever you want with it.
 ## Contributing
 
 PRs welcome! Especially:
-- YouTube integration (see [INTEGRATION_GUIDE.md](guide/INTEGRATION_GUIDE.md))
+- YouTube integration (see [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md))
 - Kick integration
 - Custom effects
-- Linux packaging
+- Windows/macOS testing
